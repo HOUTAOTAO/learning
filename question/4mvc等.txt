@@ -1,0 +1,32 @@
+MVC、MVP、MVVM、MVPVM区别
+
+//MVC
+View 持有了Controller，把事件传递给Controller，Controller 
+由此去触发Model层的事件，Model更新完数据（网络或者本地数据）
+之后触发View的更新事件
+
+//MVP
+MVP其实是MVC的封装和演化，Controller被拆分，只用它处理View的点击事件，
+数据绑定，等处理，而View被拆分，更加专注于视图的更新，只做跟视图相关的操作，
+而Presenter被独立出来，用于沟通View和Model之间的联系，
+Model不能直接作用于View 的更新，只能通过Presenter来通知View进行视图的刷新，
+比如showLoading（），showEmpty()，showToast（）等等，
+这样View就完全被独立出来了，只是被动接受Presenter的命令，
+这样避免了View 有过多的逻辑处理，更加简单。Presenter持有了Model。
+Model 只用于处理跟数据获取相关的逻辑。
+
+//MVVM
+又称状态机制，View和ViewModel 是进行绑定的，改变ViewModel 
+就会直接作用到View视图上，而View 会把事件传递给ViewModel,ViewModel
+去对Model进行操作并接受更新。
+可以看到MVPVM 其实就是MVP的变种，
+加入了MVVM事件特性，增加了ViewModel，
+
+功能分类：
+View：只做视图更新操作
+Model: 只做数据处理，网络数据 、本地数据(VUEX)
+Presenter: 只做业务逻辑处理，View或者Model 事件分发
+ViewModel: 绑定View 和 Model，添加数据变更监视器
+
+
+

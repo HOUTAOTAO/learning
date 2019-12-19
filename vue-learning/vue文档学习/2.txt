@@ -1,0 +1,43 @@
+v-bind （：is）//绑定对象： 元素属性 组件属性（prop传值）  class/style值
+        绑定数据：data（props通过this传入data使用），computed(方法名)，watch(方法名)
+
+v-on//事件监听(click等)，绑定方法
+
+
+data
+methonds
+computed
+
+/////////////
+import
+const a=[]
+export default{
+    props{
+        aa:aa,
+        bb:dd
+    }
+    data(){
+        return {a:a,b:b}
+    },
+    mounted(){
+
+    },
+    watch:{
+        c:x(){},
+        d:d
+    },
+    components:{
+
+    },
+    computed:{
+        x(){},
+        x(){},
+    }
+
+
+}
+
+/////
+数据流动
+1组件布局的数据流动//props
+2业务逻辑的数据流动//vuex/store

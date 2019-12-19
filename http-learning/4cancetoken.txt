@@ -1,0 +1,56 @@
+我们在做项目的时候，为了防止一些用户的疯狂点击，
+获取是tab栏的快速切换，我们往往需要做一些防止重复提交的操作，
+好处就不用说了。请看代码（使用的是axios）
+var app = new Vue({
+  el: '#app',
+  data: {
+    source: null,
+    minutehchartid:'',
+    endTime:'',
+    startTime:'',
+    currentMinutehchartid:'',
+    currentEndTime:'',
+    currentStartTime:'',
+  },
+  methods: {
+    sendRequest() {
+ //如果是同一个请求就按返回，不需要重复请求
+      if (this.currentMinutehchartid==this.minutehchartid&& this.currentEndTime.getTime()==this.endTime.getTime()&&this.currentStartTime.getTime()==this.startTime.getTime()) {
+          return;
+       }
+       //防止连续点击，取消上一次请求
+         if (this.source != '') {
+            this.source.cancel();
+         }
+       this.currentMinutehchartid=this.minutehchartid;
+       this.currentEndTime=this.endTime;
+       this.currentStartTime=this.startTime;
+       this.source = this.axios.CancelToken.source(); // 这里初始化source对象
+       this.axios({
+          method: 'post',
+          url: "tideInfo/getTideMinuteListPerHour",
+          data: {
+                endTime: this.endTime,
+                startTime:this.startTime,
+                tideStationId:_this.minutehchartid
+           },
+           cancelToken: _this.source.token,
+      })
+      .then(res => {
+        // 你的逻辑
+      })
+      .catch(res => {
+        // 如果调用了cancel方法，那么这里的res就是cancel传入的信息
+        // 你的逻辑
+           if (this.axios.isCancel(response)) {
+                console.log('Request canceled', response.message);
+            } else {
+               this.$message({
+                        type: 'info',
+                         message: '服务器错误!'
+                });
+             }
+      })
+    },
+  }
+})

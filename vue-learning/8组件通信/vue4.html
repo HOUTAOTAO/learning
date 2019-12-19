@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        Vue.component('child',{
+        inject:['for'],//得到父组件传递过来的数据
+        data(){
+            return {
+                mymessage:this.for
+            }
+        },
+        template:`
+            <div>
+                <input type="tet" v-model="mymessage"> 
+            </div>`
+    })
+    Vue.component('parent',{
+        template:
+            `<div>
+                <p>this is parent compoent!</p>
+                <child></child>
+            </div>
+        `,
+        provide:{
+            for:'test'
+        },
+        data(){
+            return {
+                message:'hello'
+            }
+        }
+    })
+    var app=new Vue({
+        el:'#app',
+        template:`
+            <div>
+                <parent></parent>
+            </div>
+        `
+    })
+    </script>
+</body>
+</html>

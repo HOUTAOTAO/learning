@@ -1,0 +1,45 @@
+装饰模式指的是在不必改变原类文件和使用继承的情况下，
+动态地扩展一个对象的功能。
+它是通过创建一个包装对象，也就是装饰来包裹真实的对象
+
+element-ui、iView等各类UI框架大家都有用过，
+这些框架提供的Input组件应该也不会陌生吧，
+交互友好功能强大。今天我们的设计会与他们有点与众不同
+// 原生input需要验证功能，我们用带有验证能力的valid-input包裹
+<valid-input>
+  <input v-model="username" type="text" />
+</valid-input>
+//1
+valid-input要做验证需要：
+对那个值进行验证
+用什么规则进行验证
+//input 与username进行绑定
+<valid-input field="username" options="[{ rule: required, message: '用户名必须' }]">
+  <input v-model="username" type="text" />
+</valid-input>
+如果哪天我不需要验证功能只需删掉valid-input，这样很灵活的实现功能的扩展
+//2
+checkbox、radio浏览器原生长的丑不说而且在不同的浏览器上还不一样，这对于我们优秀的产品来说是不能忍的
+// 常规解决方案，自己通过CSS模式checkbox的交互
+<label class="checkbox-wrapper">
+  <span class="checkbox">
+    <span class="checkbox-inner"></span>
+    <input type="checkbox" class="checkbox-input">
+  </span>
+  Checkbox
+</label>
+
+装饰者模式实现
+// stage.vue
+// decoratorCheckbox的实现简化每次使用要写很多标签和注明class
+
+<tempalte>
+  <div>
+    <decorator-checkbox>
+      <input type="checkbox" class="checkbox-input">
+    </decorator-checkbox>
+  </div>
+</template>
+
+/////
+

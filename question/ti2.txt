@@ -1,0 +1,196 @@
+什么是跨域，跨域请求资源的方法有那些
+jsonp
+cors
+
+vue中computed和methods有什么区别
+缓存和不缓存
+
+///////
+function Person (name) {
+            this.name = name;
+            this.friends = ['小李','小红'];
+            this.getName = function () {
+                return this.name;
+            }
+        };//构造函数
+
+Person.prototype.geSex = function () {       
+      console.log("男");
+};//原型链
+//////////////
+
+javaScript实现继承的方法有那些
+//////1、原型链继承
+核心： 将父类的实例作为子类的原型
+缺点：  父类新增原型方法/原型属性，子类都能访问到，父类一变其它的都变了
+function persion(){}
+function parent(){}
+parent.prototype=new persion()
+
+//////2、构造继承
+核心：使用父类的构造函数来增强子类实例，等于是复制父类的实例属性给子类（没用到原型）
+缺点： 方法都在构造函数中定义， 只能继承父类的实例属性和方法，不能继承原型属性/方法，无法实现函数复用，每个子类都有父类实例函数的副本，影响性能
+-----因为this对象是在运行时基于函数的执行环境绑定的。也就是说，在全局中，this等于window，而当函数被作为某个对象的方法调用时，this等于那个对象。
+call、apply 方法可将一个函数的对象上下文从初始的上下文改变为由 thisObj 指定的新对象。
+function persion(name){}
+//Person.prototype.geSex = function () {}    //对原型进行扩展的方法就无法复用了
+function parent(age){
+     persion.call(this,'Tom');
+     this.age;
+}
+var result = new Parent(23);
+///////3、组合继承
+组合继承（所有的实例都能拥有自己的属性，并且可以使用相同的方法，组合继承避免了原型链和借用构造函数的缺陷，结合了两个的优点，是最常用的继承方式）
+核心：通过调用父类构造，继承父类的属性并保留传参的优点，然后再通过将父类实例作为子类原型，实现函数复用
+缺点：调用了两次父类构造函数，生成了两份实例（子类实例将子类原型上的那份屏蔽了）
+function Person  (name) {this.name;};
+Person.prototype.getName = function () {};//原型方法
+function Parent (age) { Person.call(this,'老明');this.age = age; };//借构造
+Parent.prototype = new Person('老明');//借原型
+
+///////4、寄生组合继承
+核心：通过寄生方式，砍掉父类的实例属性，这样，在调用两次父类的构造的时候，就不会初始化两次实例方法/属性，避免的组合继承的缺点
+缺点：堪称完美，但实现较为复杂
+function Person(name) {}
+function Parent(age) {Person.call(this,"老明");}
+(function () {
+     var Super = function () {};     // 创建一个没有实例方法的类
+     Super.prototype = Person.prototype;
+     Parent.prototype = new Super();     //将实例作为子类的原型
+})();
+var result = new Parent(23);
+
+请用js实现快速排序
+
+二叉树遍历结果
+////////////////////////////递归
+function TreeCode() {
+    let BiTree = function (ele) {
+        this.data = ele;
+        this.lChild = null;
+        this.rChild = null;
+    }
+
+    this.createTree = function () {
+        let biTree = new BiTree('A');
+        biTree.lChild = new BiTree('B');
+        biTree.rChild = new BiTree('C');
+        biTree.lChild.lChild = new BiTree('D');
+        biTree.lChild.lChild.lChild = new BiTree('G');
+        biTree.lChild.lChild.rChild = new BiTree('H');
+        biTree.rChild.lChild = new BiTree('E');
+        biTree.rChild.rChild = new BiTree('F');
+        biTree.rChild.lChild.rChild = new BiTree('I');
+        return biTree;
+    }
+}
+
+//前序遍历
+function ProOrderTraverse(biTree) {
+    if (biTree == null) return;
+    console.log(biTree.data);
+    ProOrderTraverse(biTree.lChild);
+    ProOrderTraverse(biTree.rChild);
+}
+
+//中序遍历
+function InOrderTraverse(biTree) {
+    if (biTree == null) return;
+    InOrderTraverse(biTree.lChild);
+    console.log(biTree.data);
+    InOrderTraverse(biTree.rChild);
+}
+
+//后续遍历
+function PostOrderTraverse(biTree) {
+    if (biTree == null) return;
+    PostOrderTraverse(biTree.lChild);
+    PostOrderTraverse(biTree.rChild);
+    console.log(biTree.data);
+}
+
+let myTree = new TreeCode();
+console.log(myTree.createTree());
+console.log('前序遍历')
+ProOrderTraverse(myTree.createTree());
+console.log('中序遍历')
+InOrderTraverse(myTree.createTree());
+console.log('后续遍历')
+PostOrderTraverse(myTree.createTree());
+///////////////////////////////////
+请说明队列的堆栈特点，并用数组模拟队列和堆栈  
+二叉树的非递归遍历
+　　深度优先遍历（主要利用栈的先进后出）
+　　广度优先遍历（主要利用队列的先进先出）
+//深度优先非递归
+function DepthFirstSearch(biTree) {
+    let stack = [];
+    stack.push(biTree);
+
+    while (stack.length != 0) {
+        let node = stack.pop();
+        console.log(node.data);
+        if (node.rChild) {
+            stack.push(node.rChild);
+        }
+        if (node.lChild) {
+            stack.push(node.lChild);
+        }
+
+    }
+
+}
+//广度优先非递归
+function BreadthFirstSearch(biTree) {
+    let queue = [];
+    queue.push(biTree);
+    while (queue.length != 0) {
+        let node = queue.shift();
+        console.log(node.data);
+        if (node.lChild) {
+            queue.push(node.lChild);
+        }
+        if (node.rChild) {
+            queue.push(node.rChild);
+        }
+    }
+
+}
+深度优先主要是利用栈，先压右子树，再压左子树
+广度优先主要利用队列，先入左子树，再入右子树
+深度优先的遍历结果与前序遍历相同ABDGHCEIF，广度优先的遍历结果是 ABCDEFGHI
+
+2、创建二叉树
+1中创建二叉树的方式过于笨拙，假入我们根据完全二叉树的模型建立自己的二叉树，
+空数据的地方用#表示，如下图所示我们称之为扩展二叉树，
+我们取其前序遍历的序列 AB#D##C##。
+//前序遍历得到的字符串
+let strArr = 'AB#D##C##'.split('');
+
+function BiTree(ele) {
+    this.data = ele;
+    this.lChild = null;
+    this.rChild = null;
+}
+var newTree = new BiTree('#');
+
+function createBiTree(biTree) {
+    if (strArr.length == 0) return;
+    let str = strArr.shift();
+    if (str == '#') return;
+    biTree.data = str;
+    if (strArr[0] != '#') {
+        biTree.lChild = new BiTree('#')
+    }
+    createBiTree(biTree.lChild);
+    if (strArr[0] != '#') {
+        biTree.rChild = new BiTree('#')
+    }
+    createBiTree(biTree.rChild);
+}
+createBiTree(newTree);
+console.log(newTree);
+ProOrderTraverse(newTree)
+/////////////////////////////////
+  
+    

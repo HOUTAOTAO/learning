@@ -1,0 +1,45 @@
+7.boradcast和dispatch 
+vue1.0中提供了这种方式，但vue2.0中没有，但很多开源软件都自己封装了这种方式，
+比如min ui、element ui和iview等。 
+比如如下代码，一般都作为一个mixins去使用, 
+broadcast是向特定的父组件，触发事件，
+dispatch是向特定的子组件触发事件，
+本质上这种方式还是on和on和emit的封装，
+但在一些基础组件中却很实用。
+function broadcast(componentName, eventName, params) {
+  this.$children.forEach(child => {
+    var name = child.$options.componentName;
+
+    if (name === componentName) {
+      child.$emit.apply(child, [eventName].concat(params));
+    } else {
+      broadcast.apply(child, [componentName, eventName].concat(params));
+    }
+  });
+}
+export default {
+  methods: {
+    dispatch(componentName, eventName, params) {
+      var parent = this.$parent;
+      var name = parent.$options.componentName;
+      while (parent && (!name || name !== componentName)) {
+        parent = parent.$parent;
+
+        if (parent) {
+          name = parent.$options.componentName;
+        }
+      }
+      if (parent) {
+        parent.$emit.apply(parent, [eventName].concat(params));
+      }
+    },
+    broadcast(componentName, eventName, params) {
+      broadcast.call(this, componentName, eventName, params);
+    }
+  }
+};
+8.vuex处理组件之间的数据交互 
+如果业务逻辑复杂，很多组件之间需要同时处理一些公共的数据，
+这个时候才有上面这一些方法可能不利于项目的维护，
+vuex的做法就是将这一些公共的数据抽离出来，
+然后其他组件就可以对这个公共数据进行读写操作，这样达到了解耦的目的。 

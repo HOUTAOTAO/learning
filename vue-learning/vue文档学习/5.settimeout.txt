@@ -1,0 +1,20 @@
+2、匿名函数
+setTimeout(function(){ start(argu)},1000); 调用start函数并传arg参数
+字符串、对象都行
+3、在有些情况下需在循环中使用,如：
+window.οnlοad=function(){
+       var a=[{id:1},{id:2},{id:3},{id:4}];
+       for(var i=0;i<3;i++){
+           setTimeout(function(){start(a[i])},1000);
+       }
+}
+function start(obj){ alert(obj.id);}
+输出的结果都为 4。因为在一个函数体中，a和i相对于匿名函数是全局的，循环执行完后i=3 ,都执行start(a[3]),所以输出结果相同。
+这种情况怎么解决呢，只需把setTimeout封装到一个函数中即可
+window.οnlοad=function(){
+       var a=[{id:1},{id:2},{id:3},{id:4}];
+       for(var i=0;i<3;i++){
+            set(a[i]);
+       }
+}
+function set(obj){   setTimeout(function(){start(obj)},1000);   }

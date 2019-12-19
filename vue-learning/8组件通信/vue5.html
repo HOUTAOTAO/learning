@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        Vue.component('child',{
+        props:{
+            value:String, //v-model会自动传递一个字段为value的prop属性
+        },
+        data(){
+            return {
+                mymessage:this.value
+            }
+        },
+        methods:{
+            changeValue(){
+                this.$emit('input',this.mymessage);//通过如此调用可以改变父组件上v-model绑定的值
+            }
+        },
+        template:`
+            <div>
+                <input type="text" v-model="mymessage" @change="changeValue"> 
+            </div>`
+    })
+    Vue.component('parent',{
+        template:`
+            <div>
+                <p>this is parent compoent!</p>
+                <p>{{message}}</p>
+                <child v-model="message"></child>
+            </div>
+        `,
+        data(){
+            return {
+                message:'hello'
+            }
+        }
+    })
+    var app=new Vue({
+        el:'#app',
+        template:`
+            <div>
+                <parent></parent>
+            </div>
+        `
+    })
+    </script>
+</body>
+</html>

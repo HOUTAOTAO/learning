@@ -1,0 +1,79 @@
+//inputFactory.vue
+<template>
+    <component :is="comInput" :type="type" :status="status" />
+</template>
+<script>
+import Username from './input/Username'
+import Mobile from './input/Mobile'
+import Email from './input/Email'
+import Password from './input/Password'
+import ImgCode from './input/ImgCode'
+
+const inputMap = {
+    Username,
+    Mobile,
+    Email,
+    Password,
+    ImgCode
+}
+
+export default{
+    props:{
+        name:'',//1来自form.vue
+        type:'',
+        status:''
+    },
+    computed:{
+        comInput() {
+            return inputMap[this.name]// 2来自props，传入componennt
+        }
+    },
+    components: inputMap
+}
+
+</script>
+
+//Form.vue
+<template>
+  <form>
+    <inputFactory
+      v-for="item in InputList"
+      :type="type"
+      :status="status"
+      :key="item"
+    />
+  </from>
+</template>
+<script>
+  import InputFactory from './InputFactory'
+  const formMap = {
+      login:['username','password','imgCode'],
+      mobile:['mobile','password'],
+      email:['email','password']
+  }
+  export default{
+      name:'Form',
+      props:{
+          type:''
+      },//组件上承接上级v-bind,v-bind链接属性和data，向下绑定
+      computed:{
+          inputList () {
+              return formMap[this.type]//来自props，forMap匹配，传入inputFactory
+          }
+      },//计算输出，:is="inputList"绑定，v-bind
+      data(){
+          return {}
+      },
+      methods://组件上，监听调动,v-on链接事件和方法，向下监听
+      mounted(){
+          xxx()
+      }
+      watch：{}
+      components:{
+          InputFactory
+      }
+  }
+</script>
+//
+将所有的input组件注册到form组件上，因为input组件内部有
+通过type、status来判断自己需不需要显示，我们的需求同样达到了

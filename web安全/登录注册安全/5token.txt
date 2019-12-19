@@ -1,0 +1,57 @@
+JWT原理
+一个JWT被周期（period）分寸了三个部分。JWT是URL-safe的，意味着可以用来查询字符参数。
+
+第一部分
+
+JWT的第一部分是一个js对象，表面JWT的加密方法。实例使用了HMAC SHA-266
+{
+  "typ" : "JWT",
+  "alg" : "HS256"
+}
+在加密之后，这个对象变成了一个字符串：
+
+eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9
+第二部分
+JWT的第二部分是token的核心，他也是一个JS兑现，包含了一些信息。有一些是必须的，有一些是选择性的。一个实例如下：
+
+{
+  "iss": "joe",
+  "exp": 1300819380,
+  "http://example.com/is_root": true
+}
+这被称为JWT Claims Set。因为这篇文章的目的，我们将忽视第三个参数。但是你可以阅读这篇文章.这个iss是issuer的简写，表明请求的实体。通常意味着请求API的用户。exp是expires的简写，是用来限制token的生命周期。一旦加密，JSON token就像这样：
+
+eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ
+第三部分
+第三个也是最后一个部分，是JWT根据第一部分和第二部分的签名（Signature）。像这个样子：
+dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+使用
+用户登录成功后, 服务端发送一个token给客户端
+
+
+const db = require('../mysql');
+const express = require('express');
+const app = express();
+const jwt = require('jwt-simple');
+const moment = require('moment')
+
+//...业务代码省略
+if(登录成功){
+
+  let expires = moment().add(1,'days').valueOf();  //设置过期时间
+  let token = jwt.encode({
+     iss: u_id,
+     exp: expires
+  }, app.get('jwtTokenSecret'));
+
+  //这里我把token存到数据库了,看实际情况而定
+  saveToken(rows[0].u_id,token)
+
+  return res.json({
+       userId: rows[0].u_id,
+       token: token,
+       state: true,
+       info: "登录成功",
+  })
+
+}

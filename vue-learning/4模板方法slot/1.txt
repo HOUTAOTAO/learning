@@ -1,0 +1,144 @@
+一、OOP实现
+1、算法骨架
+// template class
+// 注意：JavaScript里面没有接口的概念，与传统的OOP实现有一定的缺陷
+class AnimalTemplate {
+  constructor() {}
+  head () {}
+  body () {}
+  foot () {}
+  render () {
+    // 算法过程 ———— 身体部位排列顺序头、身体、脚
+    // render方法不能被子类重写，无法通过JavaScript本身实现需人为遵守
+    this.head()
+    this.body()
+    this.foot()
+  }
+}
+2、子类算法实现
+// 有一头猪
+class Pig extends AnimalTemplate {
+  head () {
+    console.log('head from pig')
+  }
+  body () {
+   console.log('body from pig')
+  }
+  foot () {
+    console.log('foot from pig')
+  }
+}
+
+const pig1 = new Pig()
+pig1.render() // 执行算法
+
+// 有一只鸡
+class Chicken extends AnimalTemplate {
+  head () {
+    console.log('head from chicken')
+  }
+  body () {
+   console.log('body from chicken')
+  }
+  foot () {
+    console.log('foot from chicken')
+  }
+}
+const chicken1 = new Chicken()
+chicken1.render() // 执行算法
+///////////
+二、react实现
+react中有class组件采用上面OOP的实现完全没问题，
+但是继承的方式好像在react中不怎么受欢迎，
+更流行是函数式编程（props传递）
+1、来一个很常见的场景
+class Parent {
+  constructor() {}
+  render () {
+    <div>
+      <div name="tom"></div>
+      <!-- 算法过程：children要渲染在name为joe的div中 -->
+      <div name="joe">{this.props.children}</div>
+    </div> 
+  }
+}
+class Stage {
+  constructor() {}
+  render () {
+    // 在parent中已经设定了children的渲染位置算法
+    <Parent>
+      // children的具体实现
+      <div>child</div>
+    </Parent> 
+  }  
+}
+所以我们在写jax时就已经是在使用模板方法模式
+2、再次实现OOP中完成的例子
+// 算法模板
+class AnimalTemplate {
+  constructor() {
+    ...
+  }
+  render () {
+    // 算法过程————头、身体、脚的顺序
+    return (
+      <div>
+        {this.props.renderHead()}
+        {this.props.renderBody()}
+        {this.props.renderFoot()}
+      </div>
+    )
+  } 
+}
+// 具体需求
+class Stage {
+  constructor() {}
+  pigRenderHead () {
+    return <div>pig head</div>
+  }
+  pigRenderBody () {
+    return <div>pig body</div>
+  }
+  pigRenderFoot () {
+    return <div>pig foot</div>
+  }
+  chickenRenderHead () {
+    ...
+  }
+  chickenRenderBody () {
+    ...
+  }
+  chickenRenderFoot () {
+    ...
+  }
+  render () {
+    <div>
+      <AnimalTemplate
+        renderHead={this.pigRenderHead}
+        renderBody={this.pigRenderBody}
+        renderFoot={this.pigRenderFoot}
+      />
+      <AnimalTemplate
+        renderHead={this.chickenRenderHead}
+        renderBody={this.chickenRenderBody}
+        renderFoot={this.chickenRenderFoot}
+      />
+    </div>
+    
+  }  
+}
+////////////////
+三、vue实现
+1，children在name为joe的div中
+这一篇主要分享了vue中slot的设计模式理念，结合列表渲染的场景向大家展示了模板方法模式的应用。
+之前在网上看到有人用各种骚操作实现vue的render props，现在看看有必要么，slot不管怎么看都比较顺眼（在我写这篇文章时slot的API有点捉急，v2.6.0 很好解决了这个问题）
+
+为什么开头说模板方法模式是vue、react开发中使用最多的设计模式？
+通过上面的介绍相信大家已经感受到模板方法模式的特点：
+1，封装一个算法模板
+2，用户负责某一步的具体实现
+现在想想vue，react内部封装好了diff算法、状态改变触发更新的机制、生命周期，我们在使用框架时只
+需要按照语法规则使用它们的API完成我们的业务逻辑，这也就是模板方法模式
+
+
+

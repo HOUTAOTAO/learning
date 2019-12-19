@@ -1,0 +1,51 @@
+先给出一个比较可行的方案，后面会分析安全性是怎么体现的。
+
+1用户注册过程，客户端通过rule1(pass)得到一个编码后的密码串passStr，然后调用注册接口把name/passStr传给服务器保存（不能用明文密码传输保存）
+2用户在登录页面填写了用户name和密码pass后，点击登录按钮，客户端通过rule1(pass)把明文密码转换为passStr
+3客户端发送请从服务器查询一个时间戳ts和随机盐salt
+4客户端按照一定规则rule2(pass, salt)生成一个加密字符串encryptStr1，调用登录接口，把name/encryptStr1/ts传给服务端
+5服务器接收到请求，根据name获取passStr/salt，然后按照同样的规则rule2(pass, salt)得到密码串encrptStr2
+6然后用encryptStr2与客户端传来的encryptStr1进行比对，如果两者相同，则登录成功，返回一个会话给客户端。
+
+上面的步骤中有些地方需要做一些说明：
+
+服务端不能存储明文密码，但可以存储一个编码后的密文passStr，
+这个密文在用户注册的过程中客户端生成（根据用户输入的密码pass按一定的规则rule1生成），
+通过注册接口传给服务端，服务端保存在用户表中。
+salt应该具有时效性，可以设置一个比较短的有效期（如1分钟），
+一旦超过这个时间，salt失效，通过salt生成的加密串也验证不通过。
+
+
+
+//////////rule1
+<script src="js/md5.js"></script>
+    <script>
+        var code = "123456";
+        var username = "123456";
+        var password = "123456";
+        var str1 = hex_md5("123456");
+        var str2 = b64_md5("123456");
+        var str3 = str_md5("123456");
+        var str4 = hex_hmac_md5(code,code);
+        var str5 = b64_hmac_md5(username,username);
+        var str6 = str_hmac_md5(password,password);
+        console.log(str1);            // e10adc3949ba59abbe56e057f20f883e
+        console.log(str2);            // 4QrcOUm6Wau+VuBX8g+IPg
+        console.log(str3);            // áÜ9IºY«¾VàWò>
+        console.log(str4);            // 30ce71a73bdd908c3955a90e8f7429ef
+        console.log(str5);            // MM5xpzvdkIw5VakOj3Qp7w
+        console.log(str6);            // 0Îq§;Ý9U©t)ï
+    </script>
+///////////////
+/////rule2
+
+
+
+
+
+
+
+
+
+
+

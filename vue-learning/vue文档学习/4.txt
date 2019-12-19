@@ -1,0 +1,9 @@
+队列
+1.maroktask-queue（同步，）
+1.1.1microtask-queue（回调）
+
+eventloop
+1broswing contextr
+2webworker
+
+processs.nextTick>promise.then//MI    >settimeout>setImmediate//MA优先级

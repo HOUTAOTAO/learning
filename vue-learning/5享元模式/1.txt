@@ -1,0 +1,202 @@
+享元模式使用共享技术实现相同或者相似对象的重用。
+也就是说实现相同或者相似对象的代码共享。
+常规使用方式
+this.$Message.success()、
+this.$Message.warning()、
+this.$Message.error()
+所以我们需要以vue插件的形式扩展vue的prototype
+
+//Message.js 伪代码
+export default {
+  install (Vue) {
+    // 扩展Vue的`prototype`
+    Vue.prototype.$Message = {
+      success (text) {
+        // 通常我们可能如下操作，每次new一个新的组件对象
+        const Dialog = new Vue({
+          ...
+        })
+        document.body.appendChild(Dialog.$el)
+      },
+      warning (text) {
+        // 同上，new一个新的组件对象
+        const Dialog = new Vue({
+          ...
+        })
+        document.body.appendChild(Dialog.$el)
+      },
+      error (text) {
+        // 同上，new一个新的组件对象
+        const Dialog = new Vue({
+          ...
+        })
+        document.body.appendChild(Dialog.$el)
+      }
+    }
+  }
+}
+如上例子所示每次使用Message组件都需new一个Dialog出来，
+下面我们使用享元模式的思想达到减少组件对象的目的
+//Message.js 伪代码
+export default {
+  install (Vue) {
+    // 在使用插件Vue.use(Message)时实例化一个Dialog组件对象
+    const Dialog = new Vue({
+      data () {
+        return {
+          icon: '',
+          fontStyle: '',
+          backgroundStyle: '',
+          text: ''
+        }
+      }
+      ...
+    })
+    
+    // 扩展Vue的`prototype`
+    Vue.prototype.$Message = {
+      success (text) {
+        // 改变Dialog的data.xx的值触发Dialog的更新
+        Dialog.icon = successIcon
+        Dialog.fontStyle = successFontStyle
+        Dialog.backgroundStyle = successBackgroundStyle
+        Dialog.text = text
+        // 获取Dialog的最新DOM添加到body标签中
+        document.body.appendChild(Dialog.$el)
+      },
+      warning (text) {
+        // 同上
+        ...
+        document.body.appendChild(Dialog.$el)
+      },
+      error (text) {
+        // 同上
+        ...
+        document.body.appendChild(Dialog.$el)
+      }
+    }
+  }
+}
+如上例子所示每次使用Message组件都需new一个Dialog出来，
+下面我们使用享元模式的思想达到减少组件对象的目的
+//Message.js 伪代码
+export default {
+  install (Vue) {
+    // 在使用插件Vue.use(Message)时实例化一个Dialog组件对象
+    const Dialog = new Vue({
+      data () {
+        return {
+          icon: '',
+          fontStyle: '',
+          backgroundStyle: '',
+          text: ''
+        }
+      }
+      ...
+    })
+    
+    // 扩展Vue的`prototype`
+    Vue.prototype.$Message = {
+      success (text) {
+        // 改变Dialog的data.xx的值触发Dialog的更新
+        Dialog.icon = successIcon
+        Dialog.fontStyle = successFontStyle
+        Dialog.backgroundStyle = successBackgroundStyle
+        Dialog.text = text
+        // 获取Dialog的最新DOM添加到body标签中
+        document.body.appendChild(Dialog.$el)
+      },
+      warning (text) {
+        // 同上
+        ...
+        document.body.appendChild(Dialog.$el)
+      },
+      error (text) {
+        // 同上
+        ...
+        document.body.appendChild(Dialog.$el)
+      }
+    }
+  }
+}
+
+////////////////////////////////附完整实现（示例）
+import './index.scss'
+
+let zIndex = 2001;
+
+export default {
+  install (Vue) {
+    const Dialog = new Vue({
+      data () {
+        return {
+          text: '这是一个提示',
+          icon: 'icon-waiting',
+          iconColor: '#308AFE',
+          background: '#ddd'
+        }
+      },
+      render (h) {
+        zIndex++
+        const selfStyle = {
+          background: this.background,
+          zIndex
+        }
+        return h('div',
+          {
+            class: 'm-message',
+            style: selfStyle
+          },
+          [
+            h('i', {
+              style: {marginRight: '8px', color: this.iconColor},
+              class: `iconfont ${this.icon}`
+            }),
+            this.text
+          ]
+        )
+      }
+    }).$mount()
+
+    function appendDialog(message, icon, iconColor, bgColor, time = 3) {
+      Dialog.text = message
+      Dialog.icon = icon
+      Dialog.iconColor = iconColor
+      Dialog.background = bgColor
+      let timer = ''
+      let element = document.createElement('div')
+      Dialog.$nextTick(() => {
+        element = Dialog.$el.cloneNode(true)
+        document.body.appendChild(element)
+      })
+      if(time > 0) {
+        timer = setTimeout(() => {
+            element.classList.add('outer')
+            setTimeout(() => {
+              document.body.removeChild(element)
+            }, 500);
+            clearTimeout(timer)
+        }, time * 1000);
+      }
+    }
+
+    Vue.prototype.$message = {
+      tips (message, time) {
+        appendDialog(message, 'icon-waiting', '#308AFE', '#ADD8F7', time)
+      },
+      warning(message, time) {
+        appendDialog(message, 'icon-warn', '#FFAF0D', '#FCCCA7', time)
+      },
+      success(message, time) {
+        appendDialog(message, 'icon-success', '#36B37E', '#A7E1C4', time)
+      },
+      error(message, time) {
+        appendDialog(message, 'icon-error', '#E95B5B', '#FFF4F4', time)
+      },
+      destory() {
+        document.querySelectorAll('.m-message').forEach(ele => ele.remove())
+      }
+    }
+  }
+}
+///////////////////////

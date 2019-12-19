@@ -1,0 +1,34 @@
+观察者模式（对象）=发布/订阅（事件）
+vue=在对象中数据劫持，利用了发布订阅
+
+观察者模式对我们来说应该不陌生，
+对vue原理稍微有点了解的都知道通过Object.defineProperty 拦截数据的 get/set ，
+在getter中记录依赖Watcher，在setter中触发更新Watcher.notify()，
+这里就是观察者模式的应用
+
+观察者（Observer）模式与发布（Publish）/订阅（Subscribe）的关系
+他们的行为方式相似add，notify/trigger，
+最明显的区别是观察者add一个具体观察者对象，
+发布/订阅add一个订阅事件
+
+// 观察者
+class Observer {
+  update () {}
+}
+
+const Observer1 = new Observer()
+Subject.add(Observer1)
+Subject.notify()
+
+// 发布订阅
+Publish.add('event1',function Subscribe() { 
+  ...do something 1
+})
+Publish.add('event1',function Subscribe() { 
+  ...do something 2
+})
+Publish.add('event1',function Subscribe() { 
+  ...do something 3
+})
+Publist.trigger('event1')
+

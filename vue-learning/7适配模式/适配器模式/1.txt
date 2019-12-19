@@ -1,0 +1,31 @@
+适配器模式（有时候也称包装样式或者包装）将一个类的接口适配成用户所期待的。
+一个适配允许通常因为接口不兼容而不能在一起工作的类工作在一起，
+做法是将类自己的接口包裹在一个已存在的类中
+假设在项目中我们原本使用了Swiper这个组件，使用方式如下：
+<swiper :prop-x="px" :prop-y="py" :prop-z="pz" />
+后来又有了一个功能更强大，性能更好的滑动组件——NbSwiper，使用方式如下：
+<nb-swiper :prop-x="px" :prop-yy="pz" :prop-z="pw" />
+两个组件处理除了`prop-x`使用相同，另外几个属性`prop-y`、`prop-yy`、`prop-z`都有一定的区别。
+如果直接在代码中一个一个的更改，工作量有点大，而且很难保证在处理一些兼容问题上不出现bug
+要解决这个问题我们可以选择将Swiper作为一个装饰组件
+// Swiper.vue
+// 项目原本使用的Swiper组件会被替换掉，我们自己封装一个Swiper组件
+<template>
+  <!-- 进行转换 -->
+  <nb-swiper :prop-x="propX" :prop-yy="propZ" :prop-z="propW" />
+</tempalte>
+<script>
+  export default {
+    props: {
+      // 接受原本Swiper的props和NbSwiper支持的props
+      propX: String,
+      propY: String,
+      propYy: String,
+      propZ: String,
+      propW: String,
+    }
+    ...
+  }
+</script>
+现在我们的工作只需在代码中增加对NbSwiper的新属性值的兼容
+

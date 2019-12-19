@@ -1,0 +1,54 @@
+JavaScript有七种数据类型：Sting  Object  null  undefined  Array  Boolean  Number
+///////////
+在立即调用函数内执行,var x1 =y1 =1;创建局部变量x1和全局变量y1.函数外部试图访问函数内部的变量,将会导致错误.
+///////
+跨域
+js可以使用jsonp进行跨域 
+通过修改document.domain来跨子域 
+使用window.name来进行跨域 
+//////
+在javascript中一共有四种调用模式:
+方法调用模式,
+函数调用模式,
+构造器调用模式,
+apply调用模式.
+///
+NaN与任何操作数进行关系比较,结果都是false.
+//
+Javascript 有11 种内置对象： Array、String、Date、Math、
+Boolean、Number、 Function、Global、Error、RegExp、Object.
+//////
+js五种基本类型：String Boolean Number null undefined 
+typeof六种返回格式：'string' 'number' 'object' 'function' 'boolean' 'undefined' 
+js七种数据类型：Sting Object null undefined Array Boolean Number.
+///////
+运行在客户端浏览器或者独立安装的脚本解释引擎中 
+弱类型语言，在运算时，程序会根据自身需要隐式转换数据类型 
+基于对象 
+///////////
+trim()属于String 对象方法. HTML 包装方法返回加入了适当HTML标签的字符串
+big() blod() strike()
+////////////////
+数组的下标从0开始，数组中最后一个元素是arr[arr.length-1]，
+而对于arr[arr.length]越界不会报错，返回未定义的值undefined
+///////////////////
+可以转换为false的值有:false、“”（空字符串）、0和NAN、null、undefined.
+/////////////
+ Math.max(x);的参数是Number类型,可以是小数,整数,正数,负数或者是0,
+ 如果不是上面所述类型就会返回NaN.
+ /////////////////////////////
+JavaScript主要数据类型:string,boolean,number; 复合数据类型:function,object.
+
+flex-flow：flex-directive flow-wrap
+
+
+
+
+
+
+
+
+
+
+
+

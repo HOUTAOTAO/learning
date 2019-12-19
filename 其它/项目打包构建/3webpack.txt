@@ -1,0 +1,4 @@
+AMD
+common.js
+ES6
+

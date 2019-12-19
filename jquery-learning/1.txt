@@ -1,0 +1,24 @@
+JQuery涉及的设计模式大致为：
+Composite pattern（组合模式）
+Composite pattern 描述了一组对象，可以使用与处理对象的单个实例同样的方式来进行处理。
+
+Adapter pattern (适配器模式)
+Adapter pattern 将对象或类的接口转变为特定的系统兼容的接口。
+
+Facade pattern (外观模式)
+Facade pattern 为更大的（可能更复杂）的代码提供一个更简单的接口。
+
+Observer pattern (观察者模式)
+Observer pattern 是系统中的对象可订阅其他对象的地方，并在感兴趣的事件发生时获得通知。
+
+Iterator pattern (迭代器模式)
+I terator pattern （允许我们遍历集合的所有元素的对象）顺序访问聚合对象的元素，无需公开其基本形式。
+
+延迟初始化
+它能延迟昂贵的过程，直到它的第一个实例需要时。
+
+Proxy pattern (代理模式)
+有些时候，我们有必要控制对象后面的访问权限和上下文，这就是Proxy pattern 有用的地方。
+
+Builder pattern (生成器模式)
+Builder pattern使我们能够仅通过制定对象的类型和内容就可以创建复杂的对象，而无需显式创建或表示该对象。

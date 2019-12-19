@@ -1,0 +1,71 @@
+所谓的代理者是指一个类别可以作为其它东西的接口。
+代理者可以作任何东西的接口：
+网上连接、存储器中的大对象、文件或其它昂贵或无法复制的资源。
+////
+我们从后端拿到了一堆数据
+
+数据不为空——进行列表显示
+数据为空——显示数据为空的提示
+// list.vue
+<template>
+ <div>
+   <div v-if="isEmpty">数据为空</div>
+   <div v-else>
+     <div v-for="item in data">
+       ... do something  
+     </div>
+   </div>
+ </div>
+</tempalte>
+<script>
+  export default{
+    props: {
+      data: Array
+    },
+    computed: {
+      isEmpty() {
+        return this.data.length < 1
+      }
+    }
+  }
+</script>
+可以发现List组件做了两件事：数据为空的处理、数据不为空的处理，这种设计是不太友好的
+Proxy
+// ProxyList.vue
+<template>
+ <div>
+   <empty v-if="isEmpty" />
+   <list v-else :data="data" />
+ </div>
+</tempalte>
+<script>
+  import Empty from './Empty'
+  import List from './List'
+  
+  export default{
+    props: {
+      data: Array
+    },
+    computed: {
+      isEmpty() {
+        return this.data.length < 1
+      }
+    },
+    components:{
+      Empty,
+      List
+    }
+  }
+</script>
+//
+适配器模式：将多个对象的不同方法调用（objA.methodA()，objB.methodB()），适配成统一调
+            用（objA.methodA()，adapterObjB.methodA()）
+
+装饰者模式：在不修改原对象的基础上动态的添加功能
+            功能：扩展功能
+            要求：装饰者要实现和被装饰对象相同的方法
+
+代理模式：为其他对象提供一种代理以控制对这个对象的访问
+          功能：控制被代理对象的访问
+          要求：与装饰者模式一样要实现和被代理对象相同的方法
+//

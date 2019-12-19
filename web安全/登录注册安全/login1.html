@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div>
+<form id='test_form' action='' method='' omsubmit='return checkForm()'>
+    <input type='text' name='username' value=''/>
+    <input type='password'  id='input_pwd' value =''/>
+    <input type='hidden' name='pwd' id='md5_pwd' value=''/>
+    <button type='submit'>提交</button>
+    </form>
+</div>
+
+<script>
+function checkForm(){
+    var input_pwd= document.getElementById('input_pwd');
+    var md5_pwd= document.getElementById('md5_pwd');
+     md5_pwd.value= toMD5(input_pwd.value);            
+    //进行下一步
+    return ture;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+javascript中条件判断时，会被转为false的情况
+////逻辑对象无初始值或者其值为 0、-0、null、""、false、undefined 或者 NaN，
+那么if判断 false 其他为true  jq选择器选择返回的对象永远是jq的object对象
+///
+函数声明与函数表达式的区别
+///函数声明和函数表达式的区别本质其实是函数声明提升和变量声明提升的区别。
+/////
+解释JavaScript的同源策略
+
+////概念:同源策略是客户端脚本（尤其是Javascript）的重要的安全度量标准。它最早出自Netscape Navigator2.0，其目的是防止某个文档或脚本从多个不同源装载。
+这里的同源策略指的是：协议，域名，端口相同，同源策略是一种安全协议。指一段脚本只能读取来自同一来源的窗口和文档的属性。
+为什么要有同源限制？
+我们举例说明：比如一个黑客程序，他利用Iframe把真正的银行登录页面嵌到他的页面上，当你使用真实的用户名，密码登录时，他的页面就可以通过Javascript读取到你的表单中input中的内容，这样用户名，密码就轻松到手了。
+//////////
+使用js操作子页面iframe内的元素节点
+/////最核心的就是获取iframe中的元素节点
+
+  上代码： var _iframe = document.getElementById('iframe').contentWindow;
+
+               //选中iframe元素并且通过contentWindow获取iframe中window对象
+                 var _div =_iframe.document.getElementById('div');
+
+              //这一步很明显了，就是获取iframe页中的元素
+              获取到了 就可以对iframe中的元素进行操作啦。
+
+
+
+  使用JQ的话，关键也是contentWindow。代码如下
+
+$("#iframe")[0].contentWindow.$("#img").attr("src","...");//就可以对iframe下的id为img的元素src进行操作了
+
+需要注意的是，这里的$("#iframe")后面需要一个[0]，因为JQ的$()选择器是多选，获取的是一个数组对象，不可以直接和js使用。
+
+另外需要提及的是，操作不能跨域，跨域上述方法就不行了。并且使用本地跑的话，谷歌会报错，本地跑可以使用火狐，或者自己开个阿帕奇，谷歌就不会报错啦
+/////////////////////////
+
+JavaScript中判断数据类型的方法有那些，优缺点是什么
+//
+
+简述同步和异步的区别，如何避免回调地狱
+/////////////
+var img1 = new Image();
+var img2 = new Image();
+var img3 = new Image();
+img1.src = "地址1";
+img1.onload = function(){
+    img2.src = "地址2";
+    img2.onload = function(){
+        img3.src = "地址3";
+        img3.onload = function(){
+            alert("全部加载完成!")
+        }
+    }
+}
+////////////////////
+数组去重
